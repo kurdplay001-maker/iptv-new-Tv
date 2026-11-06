@@ -1,0 +1,6 @@
+{
+  "name": "Kurd Play",
+  "description": "IPTV player with Xtream Codes and M3U playlist support for Live TV, Movies, and Series",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

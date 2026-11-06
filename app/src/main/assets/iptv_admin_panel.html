@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KurdPlay IPTV Web Admin - کۆنترۆڵ پەنێڵی کوردپلەی</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 Pro Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #07090E;
+            --surface-dark: #0F131C;
+            --card-surface: #171D2A;
+            --card-hover: #1F2738;
+            --primary-gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.35);
+            --cyan-neon: #00E5FF;
+            --emerald-green: #00E676;
+            --rose-red: #FF1744;
+            --purple-glow: #7C4DFF;
+            --text-main: #FFFFFF;
+            --text-sub: #94A3B8;
+            --text-muted: #64748B;
+            --border-glass: rgba(255, 255, 255, 0.12);
+            --border-gold: rgba(255, 215, 0, 0.3);
+            --glass-bg: rgba(15, 19, 28, 0.85);
+            --font-main: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255, 215, 0, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(0, 229, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(124, 77, 255, 0.03) 0%, transparent 60%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            direction: rtl;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gold);
+        }
+
+        /* Header Navigation */
+        header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-gold);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #FFD700 0%, #FF8F00 100%);
+            color: #000;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 0 0 20px var(--gold-glow);
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+            100% { box-shadow: 0 0 25px rgba(255,215,0,0.7); }
+        }
+
+        .logo-title h1 {
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFF 30%, var(--primary-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-title p {
+            font-size: 11px;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--emerald-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--emerald-green);
+            display: inline-block;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--card-surface);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            padding: 9px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+            color: #000;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-gold:hover {
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, #FFE033 0%, #FFB300 100%);
+        }
+
+        .btn-cyan {
+            background: linear-gradient(135deg, #00E5FF 0%, #0088FF 100%);
+            color: #000;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-cyan:hover {
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #00E676 0%, #00A843 100%);
+            color: #000;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #FF1744 0%, #D50000 100%);
+            color: #FFF;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 4px 15px rgba(255, 23, 68, 0.4);
+        }
+
+        /* Container & Navigation */
+        .app-container {
+            display: flex;
+            flex: 1;
+        }
+
+        sidebar {
+            width: 260px;
+            background: var(--surface-dark);
+            border-left: 1px solid var(--border-glass);
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .nav-category {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 12px 10px 4px 10px;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--text-sub);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .nav-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: color 0.25s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .nav-item:hover i {
+            color: var(--primary-gold);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.03) 100%);
+            color: var(--primary-gold);
+            border-right: 3px solid var(--primary-gold);
+        }
+
+        .nav-item.active i {
+            color: var(--primary-gold);
+        }
+
+        .nav-badge {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--primary-gold);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Main Workspace */
+        main {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            max-width: 100%;
+        }
+
+        /* Toast & Status Banner */
+        .status-banner {
+            background: rgba(0, 230, 118, 0.12);
+            border: 1px solid var(--emerald-green);
+            color: var(--emerald-green);
+            padding: 12px 18px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 230, 118, 0.15);
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Page Top Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            background: var(--surface-dark);
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 215, 0, 0.12);
+            color: var(--primary-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .page-title h2 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .page-title p {
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+
+        /* Stats Cards Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface-dark);
+            border: 1px solid var(--border-glass);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 4px; height: 100%;
+            background: var(--primary-gold);
+            border-radius: 0 18px 18px 0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-gold);
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.12);
+        }
+
+        .stat-info h3 {
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--primary-gold);
+            line-height: 1;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--primary-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Cards & Tables */
+        .content-card {
+            background: var(--surface-dark);
+            border-radius: 18px;
+            border: 1px solid var(--border-glass);
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 240px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .search-input {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 9px 36px 9px 14px;
+            color: #FFF;
+            font-size: 12px;
+            outline: none;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        th {
+            background: var(--card-surface);
+            color: var(--primary-gold);
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 800;
+            border-bottom: 1.5px solid var(--border-glass);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 12px;
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 215, 0, 0.02);
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-green { background: rgba(0, 230, 118, 0.15); color: var(--emerald-green); border: 1px solid rgba(0, 230, 118, 0.3); }
+        .badge-gold { background: rgba(255, 215, 0, 0.15); color: var(--primary-gold); border: 1px solid rgba(255, 215, 0, 0.3); }
+        .badge-cyan { background: rgba(0, 229, 255, 0.15); color: var(--cyan-neon); border: 1px solid rgba(0, 229, 255, 0.3); }
+        .badge-purple { background: rgba(124, 77, 255, 0.15); color: #B388FF; border: 1px solid rgba(124, 77, 255, 0.3); }
+
+        /* Form Inputs */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            color: var(--text-sub);
+            font-weight: 700;
+        }
+
+        .form-control {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #FFF;
+            font-size: 12px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        /* Image File Pickers */
+        .image-picker-field {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .file-upload-btn {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 136, 255, 0.2) 100%);
+            color: var(--cyan-neon);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .file-upload-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.35) 0%, rgba(0, 136, 255, 0.35) 100%);
+            box-shadow: 0 0 14px rgba(0, 229, 255, 0.4);
+        }
+
+        /* Banner Image Slots */
+        .banner-slots-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .banner-slot-item {
+            background: var(--card-surface);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .banner-slot-preview {
+            width: 70px;
+            height: 44px;
+            border-radius: 8px;
+            background: var(--bg-dark);
+            border: 1px dashed var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text-muted);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .banner-slot-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner-slot-input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        /* Modal Dialog - FULL SCREEN / SPACIOUS FIX */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 99999;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--surface-dark);
+            border: 1.5px solid var(--primary-gold);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 620px;
+            padding: 24px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.9), 0 0 40px var(--gold-glow);
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+            margin: 16px auto;
+            animation: modalScale 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalScale {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 12px;
+        }
+
+        .modal-header h3 {
+            color: var(--primary-gold);
+            font-size: 16px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: var(--text-sub);
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--rose-red);
+            color: #FFF;
+        }
+
+        /* Image Thumbnails */
+        .thumb-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--border-glass);
+            background: var(--bg-dark);
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 820px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 14px;
+            }
+
+            .logo-area {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-actions {
+                width: 100%;
+                display: flex;
+                gap: 8px;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+                justify-content: center;
+                padding: 10px 6px;
+                font-size: 11px;
+            }
+
+            .app-container {
+                flex-direction: column;
+            }
+
+            sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 8px 10px;
+                border-left: none;
+                border-bottom: 1px solid var(--border-glass);
+            }
+
+            .nav-category {
+                display: none;
+            }
+
+            .nav-item {
+                padding: 8px 12px;
+                font-size: 11px;
+                white-space: nowrap;
+                border-right: none;
+            }
+
+            .nav-item.active {
+                border-bottom: 3px solid var(--primary-gold);
+                border-right: none;
+            }
+
+            main {
+                padding: 12px;
+            }
+
+            .modal {
+                padding: 8px;
+                align-items: flex-start;
+            }
+
+            .modal-content {
+                width: 100%;
+                max-width: 100%;
+                margin: 8px auto;
+                padding: 18px 14px;
+                border-radius: 16px;
+                max-height: 94vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-area">
+            <div class="logo-badge">K</div>
+            <div class="logo-title">
+                <h1>KurdPlay IPTV Web Panel</h1>
+                <p><span class="status-dot"></span> بەڕێوەبردنی ڕاستەوخۆ و ئۆنلاینی داتاکان ⚡</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn btn-cyan" onclick="openInChrome()">
+                <i class="fa-brands fa-chrome"></i>
+                <span>کردنەوە لە Google Chrome 🌐</span>
+            </button>
+            <button class="btn btn-green" onclick="syncFromCloud()">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>هاوکاتکردن لە سێرڤەر 🔄</span>
+            </button>
+            <button class="btn btn-gold" onclick="pushToCloud()">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>سەیڤ و ڕەوانەکردن 💾</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <sidebar>
+            <div class="nav-category">سەرەکی</div>
+            <div class="nav-item active" onclick="switchTab('dashboard', this)">
+                <div class="nav-item-left">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>داشبۆردی گشتی</span>
+                </div>
+            </div>
+
+            <div class="nav-category">بەڕێوەبردنی ناوەرۆک</div>
+            <div class="nav-item" onclick="switchTab('channels', this)">
+                <div class="nav-item-left">
+                    <i class="fa-solid fa-tv"></i>
+                    <span>کەناڵەکان & فیلم</span>
+                </div>
+                <span class="nav-badge" id="badgeChannels">0</span>
+            </div>
+
+            <div class="nav-item" onclick="switchTab('accounts', this)">
+                <div class="nav-item-left">
+                    <i class="fa-solid fa-users"></i>
+                    <span>بەشداربووانی VIP</span>
+                </div>
+                <span class="nav-badge" id="badgeAccounts">0</span>
+            </div>
+
+            <div class="nav-item" onclick="switchTab('market', this)">
+                <div class="nav-item-left">
+                    <i class="fa-solid fa-store"></i>
+                    <span>فرۆشگای مارکێت</span>
+                </div>
+                <span class="nav-badge" id="badgeMarket">0</span>
+            </div>
+
+            <div class="nav-item" onclick="switchTab('websites', this)">
+                <div class="nav-item-left">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>ماڵپەڕەکان</span>
+                </div>
+                <span class="nav-badge" id="badgeWebsites">0</span>
+            </div>
+
+            <div class="nav-category">ڕێکخستنەکان & وێنەی هۆم</div>
+            <div class="nav-item" onclick="switchTab('banners', this)">
+                <div class="nav-item-left">
+                    <i class="fa-solid fa-images"></i>
+                    <span>۲ وێنەکەی بەشی سەرەکی 🖼️</span>
+                </div>
+            </div>
+
+            <div class="nav-item" onclick="switchTab('settings', this)">
+                <div class="nav-item-left">
+                    <i class="fa-solid fa-gears"></i>
+                    <span>سیستەم & Backup</span>
+                </div>
+            </div>
+        </sidebar>
+
+        <!-- Main Content Area -->
+        <main>
+            <!-- Status Alert Toast -->
+            <div id="statusBanner" class="status-banner">
+                <span id="statusText">🟢 داتاکان بە سەرکەوتوویی بارکران</span>
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <!-- Tab 1: Dashboard -->
+            <div id="tab-dashboard">
+                <div class="page-header">
+                    <div class="page-title">
+                        <div class="page-title-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <div>
+                            <h2>داشبۆردی گشتی کوردپلەی</h2>
+                            <p>کورتەی زانیارییەکانی کەناڵ، بەشداربووان و فرۆشگا</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-cyan" onclick="exportBackupJSON()">
+                        <i class="fa-solid fa-file-export"></i>
+                        <span>داگرتنی داتا (Export Backup)</span>
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>کۆی بەشداربووانی VIP</h3>
+                            <p id="statAccounts">0</p>
+                        </div>
+                        <div class="stat-icon"><i class="fa-solid fa-user-shield"></i></div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>کۆی کەناڵ & فیلمەکان</h3>
+                            <p id="statChannels">0</p>
+                        </div>
+                        <div class="stat-icon"><i class="fa-solid fa-tv"></i></div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>کاڵاکانی مارکێت</h3>
+                            <p id="statMarket">0</p>
+                        </div>
+                        <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>ماڵپەڕە ئامادەکراوەکان</h3>
+                            <p id="statWebsites">0</p>
+                        </div>
+                        <div class="stat-icon"><i class="fa-solid fa-globe"></i></div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-header-bar">
+                        <h3 style="color: var(--primary-gold); font-size: 15px;"><i class="fa-solid fa-bolt"></i> کرداری خێرا (Quick Actions)</h3>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-gold" onclick="openModal('channelModal')"><i class="fa-solid fa-plus"></i> زیادرکردنی کەناڵ</button>
+                        <button class="btn btn-cyan" onclick="openModal('accountModal')"><i class="fa-solid fa-user-plus"></i> زیاکردنی یوزەر</button>
+                        <button class="btn btn-green" onclick="openModal('marketModal')"><i class="fa-solid fa-cart-plus"></i> زیاکردنی کاڵا</button>
+                        <button class="btn btn-gold" onclick="openModal('websiteModal')"><i class="fa-solid fa-globe"></i> زیاکردنی ماڵپەڕ</button>
+                    </div>
+                </div>
+
+                <!-- Online Home Banners Quick Manager Card (2 Main Image Placement Spots) -->
+                <div class="content-card" style="border: 1px solid var(--primary-gold); background: linear-gradient(135deg, rgba(20,25,35,0.9), rgba(15,20,30,0.95)); margin-top: 18px;">
+                    <div class="card-header-bar" style="border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                        <h3 style="color: var(--primary-gold); font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-images"></i> گۆڕینی ۲ وێنەکەی بەشی سەرەکی (بەشێوەی ئۆنلاین ⚡)
+                        </h3>
+                        <span style="font-size: 11px; background: rgba(212,175,55,0.15); color: var(--primary-gold); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.3);">Online App Sync 🌐</span>
+                    </div>
+                    <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 16px;">
+                        لەم بەشەوە دەتوانیت ڕاستەوخۆ بە ئۆنلاین ۲ وێنەی شوێنی سەرەوە و خوارەوەی بەشی سەرەکی ئەپەکە بگۆڕیت. هەر گۆڕانکارییەک بکەیت ڕاستەوخۆ لە سەرجەم مۆبایلی بەشداربووان نوێ دەبێتەوە.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px;">
+                        <!-- Slot 1: Top Main Screen Image -->
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span style="font-weight: 800; font-size: 13px; color: var(--primary-gold);"><i class="fa-solid fa-image"></i> ١. شوێنی وێنەی سەرەوە (Top Banner)</span>
+                                <span style="font-size: 10px; color: var(--cyan-neon); background: rgba(0,229,255,0.1); padding: 2px 8px; border-radius: 8px;">بەشی سەرەوەی هۆم</span>
+                            </div>
+                            <div class="banner-slot-preview" id="quickPrevTop" style="width: 100%; height: 110px; border-radius: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.4); border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                <i class="fa-solid fa-image" style="font-size: 28px; color: var(--text-sub);"></i>
+                            </div>
+                            <input type="text" id="quickTopUrl" class="form-control" placeholder="لینکی وێنەی سەرەوە (https://...)" style="font-size: 11px; margin-bottom: 8px;" oninput="updateSlotPreview(this.value, 'quickPrevTop')">
+                            <div style="display: flex; gap: 8px;">
+                                <label class="file-upload-btn" style="flex: 1; text-align: center; justify-content: center; font-size: 11px; padding: 6px;">
+                                    <i class="fa-solid fa-upload"></i> هەڵبژاردنی وێنە 📁
+                                    <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'quickTopUrl', 'quickPrevTop')">
+                                </label>
+                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 11px;" onclick="clearSlot('quickTopUrl', 'quickPrevTop')"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Slot 2: Bottom Main Screen Image -->
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span style="font-weight: 800; font-size: 13px; color: var(--cyan-neon);"><i class="fa-solid fa-image"></i> ٢. شوێنی وێنەی خوارەوە (Bottom Banner)</span>
+                                <span style="font-size: 10px; color: var(--primary-gold); background: rgba(212,175,55,0.1); padding: 2px 8px; border-radius: 8px;">بەشی خوارەوەی هۆم</span>
+                            </div>
+                            <div class="banner-slot-preview" id="quickPrevBot" style="width: 100%; height: 110px; border-radius: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.4); border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                <i class="fa-solid fa-image" style="font-size: 28px; color: var(--text-sub);"></i>
+                            </div>
+                            <input type="text" id="quickBotUrl" class="form-control" placeholder="لینکی وێنەی خوارەوە (https://...)" style="font-size: 11px; margin-bottom: 8px;" oninput="updateSlotPreview(this.value, 'quickPrevBot')">
+                            <div style="display: flex; gap: 8px;">
+                                <label class="file-upload-btn" style="flex: 1; text-align: center; justify-content: center; font-size: 11px; padding: 6px;">
+                                    <i class="fa-solid fa-upload"></i> هەڵبژاردنی وێنە 📁
+                                    <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'quickBotUrl', 'quickPrevBot')">
+                                </label>
+                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 11px;" onclick="clearSlot('quickBotUrl', 'quickPrevBot')"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button class="btn btn-gold" style="width: 100%; justify-content: center; font-size: 13px; padding: 10px;" onclick="saveQuickMainBanners()">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>سەیڤکردنی ڕاستەوخۆ بۆ بەشی سەرەکی ⚡ (Save Banners Online)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Channels -->
+            <div id="tab-channels" style="display:none;">
+                <div class="page-header">
+                    <div class="page-title">
+                        <div class="page-title-icon"><i class="fa-solid fa-tv"></i></div>
+                        <div>
+                            <h2>بەڕێوەبردنی کەناڵ و فیلمەکان</h2>
+                            <p>زیادکردن، دەستکاریکردن و ڕێکخستنی کەناڵەکان</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn btn-gold" onclick="openModal('channelModal')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>زیادکردنی کەناڵی نوێ</span>
+                        </button>
+                        <button class="btn btn-cyan" onclick="loadDefaultChannels()">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>داتای بنەڕەتی کەناڵەکان 📺</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-header-bar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchChannel" class="search-input" placeholder="گەڕان بەدوای کەناڵ یان کاتێگۆری..." onkeyup="filterChannels()">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>لۆگۆ</th>
+                                    <th>ناوی کەناڵ</th>
+                                    <th>کاتێگۆری</th>
+                                    <th>جۆر</th>
+                                    <th>لینکی پەخش</th>
+                                    <th>کردار</th>
+                                </tr>
+                            </thead>
+                            <tbody id="channelsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Accounts -->
+            <div id="tab-accounts" style="display:none;">
+                <div class="page-header">
+                    <div class="page-title">
+                        <div class="page-title-icon"><i class="fa-solid fa-users"></i></div>
+                        <div>
+                            <h2>بەشداربووانی VIP & Xtrem / M3U</h2>
+                            <p>بەڕێوەبردنی سێرڤەر، کۆدی Xtrem، M3U و بەشداربووان</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn btn-cyan" onclick="openModal('accountModal')">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>زیادکردنی بەشداربووی نوێ</span>
+                        </button>
+                        <button class="btn btn-gold" onclick="loadDefaultAccounts()">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>داتای بنەڕەتی بەشداربووان 👤</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-header-bar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchAccount" class="search-input" placeholder="گەڕان بۆ یوزەر، سێرڤەر، M3U یان ناوی بەشداربوو..." onkeyup="filterAccounts()">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ناوی بەشداربوو</th>
+                                    <th>جۆری هەژمار</th>
+                                    <th>یوزەرنەیم / M3U</th>
+                                    <th>تێپەڕەوشە / سێرڤەر</th>
+                                    <th>ماوە & مۆبایل</th>
+                                    <th>کردار</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Market -->
+            <div id="tab-market" style="display:none;">
+                <div class="page-header">
+                    <div class="page-title">
+                        <div class="page-title-icon"><i class="fa-solid fa-store"></i></div>
+                        <div>
+                            <h2>فرۆشگای کوردپلەی (Market)</h2>
+                            <p>زیادکردن، دەستکاری و سڕینەوەی کاڵاکانی ناو ئەپ</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn btn-green" onclick="openModal('marketModal')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>زیادکردنی کاڵای نوێ</span>
+                        </button>
+                        <button class="btn btn-cyan" onclick="loadDefaultMarket()">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>داتای بنەڕەتی کاڵاکان 🛒</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>وێنە</th>
+                                    <th>ناوی کاڵا</th>
+                                    <th>نرخ</th>
+                                    <th>کاتێگۆری</th>
+                                    <th>ژمارەی تەلەفۆن</th>
+                                    <th>کردار</th>
+                                </tr>
+                            </thead>
+                            <tbody id="marketTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 5: Websites -->
+            <div id="tab-websites" style="display:none;">
+                <div class="page-header">
+                    <div class="page-title">
+                        <div class="page-title-icon"><i class="fa-solid fa-globe"></i></div>
+                        <div>
+                            <h2>ماڵپەڕەکانی ناو ئەپ</h2>
+                            <p>بەڕێوەبردنی ئەو وێبسایتانەی ناو ئەپ پیشان دەدرێن</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn btn-gold" onclick="openModal('websiteModal')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>زیادکردنی ماڵپەڕ</span>
+                        </button>
+                        <button class="btn btn-cyan" onclick="loadDefaultWebsites()">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>داتای بنەڕەتی ماڵپەڕەکان 🌐</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>لۆگۆ</th>
+                                    <th>ناوی ماڵپەڕ</th>
+                                    <th>لینک (URL)</th>
+                                    <th>کاتێگۆری</th>
+                                    <th>کردار</th>
+                                </tr>
+                            </thead>
+                            <tbody id="websiteTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 6: Banners & Ticker (5 Slot Uploaders) -->
+            <div id="tab-banners" style="display:none;">
+                <div class="page-header">
+                    <div class="page-title">
+                        <div class="page-title-icon"><i class="fa-solid fa-rectangle-ad"></i></div>
+                        <div>
+                            <h2>ڕیکلام و نووسینی جوڵاو</h2>
+                            <p>دابینکردنی تا ٥ وێنەی ڕیکلامی مۆبایل بۆ سەرەوە و خوارەوە</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn btn-gold" onclick="saveBannersConfig()">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>سەیڤکردنی سەرجەم ڕیکلامەکان 💾</span>
+                        </button>
+                        <button class="btn btn-cyan" onclick="loadDefaultBanners()">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>ڕیکلامە بنەڕەتییەکان 🖼️</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="form-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>نووسینی جوڵاوی خوارەوەی ئەپ (Ticker Text)</label>
+                            <input type="text" id="bottomTickerText" class="form-control" placeholder="بەخێربێن بۆ ئەپی کوردپلەی...">
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>ژمارەی تەلەفۆنی پشتگیری (Support Phone)</label>
+                            <input type="text" id="supportPhone" class="form-control" placeholder="07501234567">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Banners Section (5 Slots) -->
+                <div class="content-card">
+                    <h3 style="color:var(--primary-gold); margin-bottom: 12px; font-size: 14px; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-images"></i> وێنەی ڕیکلامەکانی سەرەوە (Top Banners - Max 5)
+                    </h3>
+                    <p style="font-size: 11px; color: var(--text-sub); margin-bottom: 16px;">دەتوانیت لینکی وێنە (HTTPS) بنووسیت یان ڕاستەوخۆ دەست لە دوگمەی 'وێنەی مۆبایل 📁' بدەیت بۆ هەڵبژاردنی وێنە لە گەلەری مۆبایلەکەتدا:</p>
+                    
+                    <div class="banner-slots-grid">
+                        <!-- Top Slots 1 to 5 -->
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--primary-gold); min-width:60px;">وێنەی ١:</span>
+                            <div class="banner-slot-preview" id="prevTop0"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="topSlot0" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevTop0')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'topSlot0', 'prevTop0')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('topSlot0', 'prevTop0')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--primary-gold); min-width:60px;">وێنەی ٢:</span>
+                            <div class="banner-slot-preview" id="prevTop1"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="topSlot1" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevTop1')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'topSlot1', 'prevTop1')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('topSlot1', 'prevTop1')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--primary-gold); min-width:60px;">وێنەی ٣:</span>
+                            <div class="banner-slot-preview" id="prevTop2"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="topSlot2" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevTop2')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'topSlot2', 'prevTop2')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('topSlot2', 'prevTop2')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--primary-gold); min-width:60px;">وێنەی ٤:</span>
+                            <div class="banner-slot-preview" id="prevTop3"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="topSlot3" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevTop3')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'topSlot3', 'prevTop3')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('topSlot3', 'prevTop3')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--primary-gold); min-width:60px;">وێنەی ٥:</span>
+                            <div class="banner-slot-preview" id="prevTop4"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="topSlot4" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevTop4')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'topSlot4', 'prevTop4')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('topSlot4', 'prevTop4')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Banners Section (5 Slots) -->
+                <div class="content-card">
+                    <h3 style="color:var(--cyan-neon); margin-bottom: 12px; font-size: 14px; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-images"></i> وێنەی ڕیکلامەکانی خوارەوە (Bottom Banners - Max 5)
+                    </h3>
+                    <p style="font-size: 11px; color: var(--text-sub); margin-bottom: 16px;">دەتوانیت لینکی وێنە (HTTPS) بنووسیت یان ڕاستەوخۆ دەست لە دوگمەی 'وێنەی مۆبایل 📁' بدەیت بۆ هەڵبژاردنی وێنە لە گەلەری مۆبایلەکەتدا:</p>
+                    
+                    <div class="banner-slots-grid">
+                        <!-- Bottom Slots 1 to 5 -->
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--cyan-neon); min-width:60px;">وێنەی ١:</span>
+                            <div class="banner-slot-preview" id="prevBot0"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="botSlot0" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevBot0')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'botSlot0', 'prevBot0')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('botSlot0', 'prevBot0')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--cyan-neon); min-width:60px;">وێنەی ٢:</span>
+                            <div class="banner-slot-preview" id="prevBot1"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="botSlot1" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevBot1')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'botSlot1', 'prevBot1')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('botSlot1', 'prevBot1')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--cyan-neon); min-width:60px;">وێنەی ٣:</span>
+                            <div class="banner-slot-preview" id="prevBot2"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="botSlot2" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevBot2')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'botSlot2', 'prevBot2')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('botSlot2', 'prevBot2')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--cyan-neon); min-width:60px;">وێنەی ٤:</span>
+                            <div class="banner-slot-preview" id="prevBot3"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="botSlot3" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevBot3')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'botSlot3', 'prevBot3')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('botSlot3', 'prevBot3')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <div class="banner-slot-item">
+                            <span style="font-weight:800; font-size:12px; color:var(--cyan-neon); min-width:60px;">وێنەی ٥:</span>
+                            <div class="banner-slot-preview" id="prevBot4"><i class="fa-solid fa-image"></i></div>
+                            <input type="text" id="botSlot4" class="form-control banner-slot-input" placeholder="لینکی وێنە بنووسە یان وێنە هەڵبژێرە..." oninput="updateSlotPreview(this.value, 'prevBot4')">
+                            <label class="file-upload-btn">
+                                <i class="fa-solid fa-upload"></i> وێنەی مۆبایل 📁
+                                <input type="file" accept="image/*" style="display: none;" onchange="uploadSlotImage(event, 'botSlot4', 'prevBot4')">
+                            </label>
+                            <button class="btn btn-danger" style="padding:8px 10px;" onclick="clearSlot('botSlot4', 'prevBot4')"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 7: Settings & DB -->
+            <div id="tab-settings" style="display:none;">
+                <div class="page-header">
+                    <div class="page-title">
+                        <div class="page-title-icon"><i class="fa-solid fa-gears"></i></div>
+                        <div>
+                            <h2>ڕێکخستنی سیستەم و داتابەیس</h2>
+                            <p>پەیوەندی سێرڤەر و Backup</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3 style="color:var(--primary-gold); margin-bottom: 12px; font-size: 14px;"><i class="fa-solid fa-database"></i> ناوەندی سێرڤەر (Firebase Realtime Endpoint)</h3>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <input type="text" id="dbUrlInput" class="form-control" value="https://kurd-play-tv-default-rtdb.firebaseio.com">
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-gold" onclick="updateDbUrl()"><i class="fa-solid fa-sync"></i> بەستنەوەی سەرلەنوێ</button>
+                        <button class="btn btn-cyan" onclick="exportBackupJSON()"><i class="fa-solid fa-download"></i> داگرتنی Backup JSON</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal 1: Add Account -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-plus"></i> زیادکردنی بەشداربووی نوێ (Xtrem / M3U / VIP)</h3>
+                <button class="close-btn" onclick="closeModal('accountModal')">&times;</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>جۆری هەژمار / ئیشتراک (Account Type)</label>
+                <select id="accType" class="form-control" onchange="onAccTypeChange()">
+                    <option value="XTREAM">کۆدی Xtrem API (Server/Host, User, Pass)</option>
+                    <option value="M3U">پلا‌یلیستی M3U (M3U Link)</option>
+                    <option value="VIP">بەشداربووی VIP (User, Pass)</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>ناوی بەشداربوو (Customer Name)</label>
+                <input type="text" id="accName" class="form-control" placeholder="ئەحمەد فەرهاد">
+            </div>
+
+            <!-- Xtrem Host / Server URL -->
+            <div class="form-group" id="accHostGroup" style="margin-bottom: 12px;">
+                <label>کۆد یان ئادرەسی سێرڤەر / هۆست (Host / Server / Code)</label>
+                <input type="text" id="accHost" class="form-control" placeholder="http://domain.com:8080">
+            </div>
+
+            <!-- Username -->
+            <div class="form-group" id="accUserGroup" style="margin-bottom: 12px;">
+                <label>یوزەرنەیم (Username)</label>
+                <input type="text" id="accUser" class="form-control" placeholder="user123">
+            </div>
+
+            <!-- Password -->
+            <div class="form-group" id="accPassGroup" style="margin-bottom: 12px;">
+                <label>تێپەڕەوشە (Password)</label>
+                <input type="text" id="accPass" class="form-control" placeholder="123456">
+            </div>
+
+            <!-- M3U URL / Link -->
+            <div class="form-group" id="accM3uGroup" style="margin-bottom: 12px; display: none;">
+                <label>لینکی پلا‌یلیست M3U (M3U Link)</label>
+                <input type="text" id="accM3uUrl" class="form-control" placeholder="http://domain.com/get.php?username=...&type=m3u_plus">
+            </div>
+
+            <!-- VIP Plan selection -->
+            <div class="form-group" id="accPlanGroup" style="margin-bottom: 12px;">
+                <label>ماوەی بەشداری (Subscription Plan)</label>
+                <select id="accPlan" class="form-control">
+                    <option value="1 هەفتە">1 هەفتە (1 Week)</option>
+                    <option value="1 مانگ">1 مانگ (1 Month)</option>
+                    <option value="6 مانگ">6 مانگ (6 Months)</option>
+                    <option value="1 ساڵ" selected>1 ساڵ (1 Year)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="accPhoneGroup" style="margin-bottom: 20px;">
+                <label>ژمارەی مۆبایلی بەشداربوو (Phone Number)</label>
+                <input type="text" id="accPhone" class="form-control" placeholder="07501191987" value="07501191987">
+            </div>
+
+            <button class="btn btn-gold" style="width: 100%; justify-content: center;" onclick="addAccount()">
+                <i class="fa-solid fa-check"></i> تۆمارکردن و ناردن بۆ سێرڤەر
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal 2: Add Channel -->
+    <div id="channelModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-tv"></i> زیادکردنی کەناڵی نوێ</h3>
+                <button class="close-btn" onclick="closeModal('channelModal')">&times;</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>ناوی کەناڵ</label>
+                <input type="text" id="chTitle" class="form-control" placeholder="کوردسات / BBC Sports">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>لینکی پەخش (Stream URL - m3u8/mp4)</label>
+                <input type="text" id="chUrl" class="form-control" placeholder="http://domain.com/live/stream.m3u8">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>کاتێگۆری (Category)</label>
+                <input type="text" id="chCategory" class="form-control" placeholder="Kurdish / Movies / Sports">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>وێنەی لۆگۆ (URL یان هەڵبژاردن لە مۆبایل)</label>
+                <div class="image-picker-field">
+                    <input type="text" id="chLogo" class="form-control" placeholder="https://example.com/logo.png" style="flex:1;">
+                    <label class="file-upload-btn">
+                        <i class="fa-solid fa-image"></i> مۆبایل 📁
+                        <input type="file" accept="image/*" style="display: none;" onchange="uploadImageFile(event, 'chLogo')">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>جۆری میدیا</label>
+                <select id="chMediaType" class="form-control">
+                    <option value="LIVE">پەخشی ڕاستەوخۆ (LIVE)</option>
+                    <option value="MOVIE">فیلم (MOVIE)</option>
+                    <option value="SERIES">دراما (SERIES)</option>
+                </select>
+            </div>
+            <button class="btn btn-gold" style="width: 100%; justify-content: center;" onclick="addChannel()">
+                <i class="fa-solid fa-check"></i> تۆمارکردن و ناردن بۆ سێرڤەر
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal 3: Add Market Item -->
+    <div id="marketModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-cart-shopping"></i> زیادکردنی کاڵای فرۆشگا</h3>
+                <button class="close-btn" onclick="closeModal('marketModal')">&times;</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>ناوی کاڵا</label>
+                <input type="text" id="mkTitle" class="form-control" placeholder="ڕسیڤەری کوردپلەی Android">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>نرخی کاڵا</label>
+                <input type="text" id="mkPrice" class="form-control" placeholder="$25 / 35,000 دینار">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>کاتێگۆری</label>
+                <input type="text" id="mkCategory" class="form-control" placeholder="کەلوپەل / ڕسیڤەر">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>وێنەی کاڵا (URL یان مۆبایل)</label>
+                <div class="image-picker-field">
+                    <input type="text" id="mkImg" class="form-control" placeholder="https://example.com/item.jpg" style="flex:1;">
+                    <label class="file-upload-btn">
+                        <i class="fa-solid fa-image"></i> مۆبایل 📁
+                        <input type="file" accept="image/*" style="display: none;" onchange="uploadImageFile(event, 'mkImg')">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>ژمارەی تەلەفۆن</label>
+                <input type="text" id="mkPhone" class="form-control" placeholder="07501234567">
+            </div>
+            <button class="btn btn-green" style="width: 100%; justify-content: center;" onclick="addMarketItem()">
+                <i class="fa-solid fa-check"></i> تۆمارکردن و ناردن بۆ سێرڤەر
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal 4: Add Website -->
+    <div id="websiteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-globe"></i> زیادکردنی ماڵپەڕ</h3>
+                <button class="close-btn" onclick="closeModal('websiteModal')">&times;</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>ناوی ماڵپەڕ</label>
+                <input type="text" id="webTitle" class="form-control" placeholder="KurdPlay Official">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>لینک (URL)</label>
+                <input type="text" id="webUrl" class="form-control" placeholder="https://kurdplay.com">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>وێنەی لۆگۆ</label>
+                <div class="image-picker-field">
+                    <input type="text" id="webLogo" class="form-control" placeholder="https://example.com/logo.png" style="flex:1;">
+                    <label class="file-upload-btn">
+                        <i class="fa-solid fa-image"></i> مۆبایل 📁
+                        <input type="file" accept="image/*" style="display: none;" onchange="uploadImageFile(event, 'webLogo')">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>کاتێگۆری</label>
+                <input type="text" id="webCat" class="form-control" placeholder="General / Sports / News">
+            </div>
+            <button class="btn btn-gold" style="width: 100%; justify-content: center;" onclick="addWebsiteItem()">
+                <i class="fa-solid fa-check"></i> تۆمارکردن و ناردن بۆ سێرڤەر
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let dbUrl = "https://kurd-play-tv-default-rtdb.firebaseio.com";
+        let state = {
+            accounts: [],
+            channels: [],
+            market: [],
+            websites: [],
+            config: {}
+        };
+
+        function showStatus(msg) {
+            const banner = document.getElementById('statusBanner');
+            const text = document.getElementById('statusText');
+            text.innerText = msg;
+            banner.style.display = 'flex';
+            setTimeout(() => { banner.style.display = 'none'; }, 4000);
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display = 'none');
+            document.getElementById('tab-' + tabId).style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(el) el.classList.add('active');
+        }
+
+        let editingAccountIndex = -1;
+        let editingChannelIndex = -1;
+        let editingMarketIndex = -1;
+        let editingWebsiteIndex = -1;
+
+        function openModal(id) { 
+            if (id === 'accountModal' && editingAccountIndex === -1) {
+                document.getElementById('accName').value = '';
+                document.getElementById('accHost').value = '';
+                document.getElementById('accUser').value = '';
+                document.getElementById('accPass').value = '';
+                document.getElementById('accM3uUrl').value = '';
+                document.getElementById('accPlan').value = '1 ساڵ';
+                document.getElementById('accPhone').value = '';
+                onAccTypeChange();
+            }
+            if (id === 'channelModal' && editingChannelIndex === -1) {
+                document.getElementById('chTitle').value = '';
+                document.getElementById('chUrl').value = '';
+                document.getElementById('chCategory').value = '';
+                document.getElementById('chLogo').value = '';
+                document.getElementById('chMediaType').value = 'LIVE';
+            }
+            if (id === 'marketModal' && editingMarketIndex === -1) {
+                document.getElementById('mkTitle').value = '';
+                document.getElementById('mkPrice').value = '';
+                document.getElementById('mkCategory').value = '';
+                document.getElementById('mkImg').value = '';
+                document.getElementById('mkPhone').value = '';
+            }
+            if (id === 'websiteModal' && editingWebsiteIndex === -1) {
+                document.getElementById('webTitle').value = '';
+                document.getElementById('webUrl').value = '';
+                document.getElementById('webLogo').value = '';
+                document.getElementById('webCat').value = '';
+            }
+            const m = document.getElementById(id);
+            m.style.display = 'flex'; 
+            m.scrollTop = 0;
+        }
+
+        function closeModal(id) { 
+            if (id === 'accountModal') editingAccountIndex = -1;
+            if (id === 'channelModal') editingChannelIndex = -1;
+            if (id === 'marketModal') editingMarketIndex = -1;
+            if (id === 'websiteModal') editingWebsiteIndex = -1;
+            document.getElementById(id).style.display = 'none'; 
+        }
+
+        function updateSlotPreview(val, previewId) {
+            const prev = document.getElementById(previewId);
+            if (!prev) return;
+            const clean = val ? val.trim() : '';
+            if (clean.length > 5) {
+                prev.innerHTML = `<img src="${clean}">`;
+            } else {
+                prev.innerHTML = `<i class="fa-solid fa-image"></i>`;
+            }
+        }
+
+        function uploadImageFile(event, inputId) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 500;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > maxDim) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        }
+                    } else {
+                        if (height > maxDim) {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.68);
+                    document.getElementById(inputId).value = compressedBase64;
+                    showStatus("وێنەکە لە مۆبایلەکەتەوە بارکرا 📷🟢");
+                    img.onload = null;
+                    img.src = '';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function uploadSlotImage(event, inputId, previewId) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 600;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > maxDim) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        }
+                    } else {
+                        if (height > maxDim) {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.70);
+                    document.getElementById(inputId).value = compressedBase64;
+                    updateSlotPreview(compressedBase64, previewId);
+                    showStatus("وێنەی ڕیکلام بارکرا و چێکرا 📷🟢");
+                    img.onload = null;
+                    img.src = '';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearSlot(inputId, previewId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(previewId).innerHTML = `<i class="fa-solid fa-image"></i>`;
+        }
+
+        async function syncFromCloud() {
+            showStatus("خەریکی هاوردەکردنی داتاکانە...");
+            
+            // 1. Load local backup first if available so data is never empty
+            const localSaved = localStorage.getItem('kurdplay_admin_state');
+            if (localSaved) {
+                try {
+                    const parsed = JSON.parse(localSaved);
+                    if (parsed) {
+                        state.accounts = parsed.accounts || [];
+                        state.channels = parsed.channels || [];
+                        state.market = parsed.market || [];
+                        state.websites = parsed.websites || [];
+                        state.config = parsed.config || {};
+                    }
+                } catch(e) {}
+            }
+
+            // Populate defaults if empty from local backup
+            if (!state.accounts || state.accounts.length === 0) loadDefaultAccounts(false);
+            if (!state.channels || state.channels.length === 0) loadDefaultChannels(false);
+            if (!state.market || state.market.length === 0) loadDefaultMarket(false);
+            if (!state.websites || state.websites.length === 0) loadDefaultWebsites(false);
+            if (!state.config || !state.config.topBannerUrls || state.config.topBannerUrls.length === 0) loadDefaultBanners(false);
+
+            renderAll();
+
+            // 2. Fetch from Firebase Online Database
+            try {
+                const res = await fetch(`${dbUrl}/.json`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data) {
+                        if (data.accounts) state.accounts = Object.values(data.accounts);
+                        if (data.channels) state.channels = Object.values(data.channels);
+                        if (data.market) state.market = Object.values(data.market);
+                        if (data.websites) state.websites = Object.values(data.websites);
+                        if (data.config) state.config = data.config;
+                        
+                        // Populate defaults if empty
+                        if (!state.accounts || state.accounts.length === 0) loadDefaultAccounts(false);
+                        if (!state.channels || state.channels.length === 0) loadDefaultChannels(false);
+                        if (!state.market || state.market.length === 0) loadDefaultMarket(false);
+                        if (!state.websites || state.websites.length === 0) loadDefaultWebsites(false);
+                        if (!state.config || !state.config.topBannerUrls || state.config.topBannerUrls.length === 0) loadDefaultBanners(false);
+
+                        localStorage.setItem('kurdplay_admin_state', JSON.stringify(state));
+                        renderAll();
+                        showStatus("سەرکەوتوو بوو! داتاکان لە سێرڤەرەوە هاوکات کران 🟢");
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                showStatus("داتاکانی پێشوو لە خەزێنەی مۆبایلەکە هاوردە کران 💾🟢");
+            }
+        }
+
+        async function pushToCloud() {
+            showStatus("خەریکی ناردن و سەیڤکردنی داتاکانە لە سێرڤەر... ⏳");
+            
+            // Save local backup immediately
+            localStorage.setItem('kurdplay_admin_state', JSON.stringify(state));
+
+            try {
+                const res = await fetch(`${dbUrl}/.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        accounts: state.accounts.reduce((acc, curr, idx) => { acc['acc_' + (curr.username || idx)] = curr; return acc; }, {}),
+                        channels: state.channels.reduce((acc, curr, idx) => { acc['ch_' + idx] = curr; return acc; }, {}),
+                        market: state.market.reduce((acc, curr, idx) => { acc['mk_' + idx] = curr; return acc; }, {}),
+                        websites: state.websites.reduce((acc, curr, idx) => { acc['web_' + idx] = curr; return acc; }, {}),
+                        config: state.config
+                    })
+                });
+                if (res.ok) {
+                    showStatus("سەرجەم داتاکان سەیڤکران و ڕەوانەی سێرڤەری مەرکەزی کران ☁️💾✅");
+                    if (window.AndroidNative && window.AndroidNative.notifyDataSaved) {
+                        window.AndroidNative.notifyDataSaved();
+                    }
+                } else {
+                    showStatus("داتاکان لە خەزێنەی مۆبایلەکەت سەیڤکران (Local Backup) 💾");
+                }
+            } catch (err) {
+                console.error(err);
+                showStatus("داتاکان لە خەزێنەی مۆبایلەکەت سەیڤکران (Local Backup) 💾");
+            }
+        }
+
+        function renderAll() {
+            // Stats & Badges
+            document.getElementById('statAccounts').innerText = state.accounts.length;
+            document.getElementById('statChannels').innerText = state.channels.length;
+            document.getElementById('statMarket').innerText = state.market.length;
+            document.getElementById('statWebsites').innerText = state.websites.length;
+
+            document.getElementById('badgeAccounts').innerText = state.accounts.length;
+            document.getElementById('badgeChannels').innerText = state.channels.length;
+            document.getElementById('badgeMarket').innerText = state.market.length;
+            document.getElementById('badgeWebsites').innerText = state.websites.length;
+
+            renderAccounts(state.accounts);
+            renderChannels(state.channels);
+            renderMarket(state.market);
+            renderWebsites(state.websites);
+
+            // Banners Config
+            if (state.config) {
+                document.getElementById('bottomTickerText').value = state.config.bottomTickerText || '';
+                document.getElementById('supportPhone').value = state.config.supportPhone || '';
+                
+                const topUrls = state.config.topBannerUrls || [];
+                for (let i = 0; i < 5; i++) {
+                    const val = topUrls[i] || '';
+                    document.getElementById(`topSlot${i}`).value = val;
+                    const prev = document.getElementById(`prevTop${i}`);
+                    if (val) {
+                        prev.innerHTML = `<img src="${val}">`;
+                    } else {
+                        prev.innerHTML = `<i class="fa-solid fa-image"></i>`;
+                    }
+                }
+
+                const botUrls = state.config.bottomBannerUrls || [];
+                for (let i = 0; i < 5; i++) {
+                    const val = botUrls[i] || '';
+                    document.getElementById(`botSlot${i}`).value = val;
+                    const prev = document.getElementById(`prevBot${i}`);
+                    if (val) {
+                        prev.innerHTML = `<img src="${val}">`;
+                    } else {
+                        prev.innerHTML = `<i class="fa-solid fa-image"></i>`;
+                    }
+                }
+
+                // Quick Main Screen 2 Banner Slots
+                const mainTop = topUrls[0] || '';
+                const mainBot = botUrls[0] || '';
+                const qTopInput = document.getElementById('quickTopUrl');
+                const qBotInput = document.getElementById('quickBotUrl');
+                if (qTopInput) qTopInput.value = mainTop;
+                if (qBotInput) qBotInput.value = mainBot;
+
+                const qPrevTop = document.getElementById('quickPrevTop');
+                if (qPrevTop) {
+                    qPrevTop.innerHTML = mainTop ? `<img src="${mainTop}" style="width:100%;height:100%;object-fit:cover;">` : `<i class="fa-solid fa-image" style="font-size:28px;color:var(--text-sub);"></i>`;
+                }
+                const qPrevBot = document.getElementById('quickPrevBot');
+                if (qPrevBot) {
+                    qPrevBot.innerHTML = mainBot ? `<img src="${mainBot}" style="width:100%;height:100%;object-fit:cover;">` : `<i class="fa-solid fa-image" style="font-size:28px;color:var(--text-sub);"></i>`;
+                }
+            }
+        }
+
+        function onAccTypeChange() {
+            const type = document.getElementById('accType').value;
+            const hostG = document.getElementById('accHostGroup');
+            const userG = document.getElementById('accUserGroup');
+            const passG = document.getElementById('accPassGroup');
+            const m3uG = document.getElementById('accM3uGroup');
+            const planG = document.getElementById('accPlanGroup');
+            const phoneG = document.getElementById('accPhoneGroup');
+
+            if (type === 'XTREAM') {
+                hostG.style.display = 'block';
+                userG.style.display = 'block';
+                passG.style.display = 'block';
+                m3uG.style.display = 'none';
+                if (planG) planG.style.display = 'none';
+                if (phoneG) phoneG.style.display = 'none';
+            } else if (type === 'M3U') {
+                hostG.style.display = 'none';
+                userG.style.display = 'none';
+                passG.style.display = 'none';
+                m3uG.style.display = 'block';
+                if (planG) planG.style.display = 'none';
+                if (phoneG) phoneG.style.display = 'none';
+            } else { // VIP
+                hostG.style.display = 'none';
+                userG.style.display = 'block';
+                passG.style.display = 'block';
+                m3uG.style.display = 'none';
+                if (planG) planG.style.display = 'block';
+                if (phoneG) phoneG.style.display = 'block';
+            }
+        }
+
+        function openInChrome() {
+            if (window.AndroidNative && window.AndroidNative.openInChrome) {
+                window.AndroidNative.openInChrome();
+            } else {
+                downloadStandaloneHtml();
+            }
+        }
+
+        function downloadStandaloneHtml() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'kurdplay_admin_panel.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showStatus("فایلی سایتی ئادمن لادرا بۆ Google Chrome 🌐✅");
+        }
+
+        function renderAccounts(accountsList) {
+            const accBody = document.getElementById('accountsTableBody');
+            accBody.innerHTML = accountsList.map((acc, i) => {
+                const type = (acc.type || 'VIP').toUpperCase();
+                let typeBadge = '';
+                let colUser = '';
+                let colPassHost = '';
+
+                if (type === 'XTREAM') {
+                    typeBadge = `<span class="badge badge-purple"><i class="fa-solid fa-server"></i> XTREAM</span>`;
+                    colUser = `<span class="badge badge-gold">${acc.username || 'user'}</span>`;
+                    colPassHost = `<code>${acc.password || ''}</code><br><small style="color:var(--text-sub);">${acc.host || ''}</small>`;
+                } else if (type === 'M3U') {
+                    typeBadge = `<span class="badge badge-cyan"><i class="fa-solid fa-list"></i> M3U</span>`;
+                    colUser = `<code style="font-size:11px; word-break:break-all;">${acc.m3uUrl || acc.username || ''}</code>`;
+                    colPassHost = `<small style="color:var(--text-sub);">M3U Playlist</small>`;
+                } else {
+                    typeBadge = `<span class="badge badge-gold"><i class="fa-solid fa-user-check"></i> VIP USER</span>`;
+                    colUser = `<span class="badge badge-gold">${acc.username || 'user'}</span>`;
+                    colPassHost = `<code>${acc.password || ''}</code>`;
+                }
+
+                const plan = acc.planType || acc.subscriptionPlan || '1 ساڵ';
+                const phone = acc.customerPhone || '';
+
+                return `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td><strong>${acc.accountName || acc.name || 'VIP User'}</strong></td>
+                        <td>${typeBadge}</td>
+                        <td>${colUser}</td>
+                        <td>${colPassHost}</td>
+                        <td><span class="badge badge-green">${plan}</span><br><small style="color:var(--text-sub);">${phone}</small></td>
+                        <td>
+                            <button class="btn btn-gold" style="padding: 6px 10px; margin-left:4px;" onclick="editAccount(${i})" title="دەستکاری"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteAccount(${i})" title="سڕینەوە"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderChannels(channelsList) {
+            const chBody = document.getElementById('channelsTableBody');
+            chBody.innerHTML = channelsList.map((ch, i) => `
+                <tr>
+                    <td><img src="${ch.logoUrl || 'https://via.placeholder.com/40'}" class="thumb-img"></td>
+                    <td><strong>${ch.title}</strong></td>
+                    <td><span class="badge badge-cyan">${ch.category}</span></td>
+                    <td><span class="badge badge-gold">${ch.mediaType || 'LIVE'}</span></td>
+                    <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis;"><code>${ch.streamUrl}</code></td>
+                    <td>
+                        <button class="btn btn-gold" style="padding: 6px 10px; margin-left:4px;" onclick="editChannel(${i})" title="دەستکاری"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteChannel(${i})" title="سڕینەوە"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderMarket(marketList) {
+            const mkBody = document.getElementById('marketTableBody');
+            mkBody.innerHTML = marketList.map((m, i) => `
+                <tr>
+                    <td><img src="${m.imageUrl || 'https://via.placeholder.com/40'}" class="thumb-img"></td>
+                    <td><strong>${m.title}</strong></td>
+                    <td><span class="badge badge-green">${m.price}</span></td>
+                    <td>${m.category}</td>
+                    <td>${m.contactPhone || ''}</td>
+                    <td>
+                        <button class="btn btn-gold" style="padding: 6px 10px; margin-left:4px;" onclick="editMarket(${i})" title="دەستکاری"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteMarket(${i})" title="سڕینەوە"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderWebsites(websiteList) {
+            const webBody = document.getElementById('websiteTableBody');
+            webBody.innerHTML = websiteList.map((w, i) => `
+                <tr>
+                    <td><img src="${w.logoUrl || 'https://via.placeholder.com/40'}" class="thumb-img"></td>
+                    <td><strong>${w.title}</strong></td>
+                    <td><code>${w.url}</code></td>
+                    <td>${w.category}</td>
+                    <td>
+                        <button class="btn btn-gold" style="padding: 6px 10px; margin-left:4px;" onclick="editWebsite(${i})" title="دەستکاری"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteWebsite(${i})" title="سڕینەوە"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterChannels() {
+            const query = document.getElementById('searchChannel').value.toLowerCase();
+            const filtered = state.channels.filter(c => 
+                (c.title && c.title.toLowerCase().includes(query)) || 
+                (c.category && c.category.toLowerCase().includes(query))
+            );
+            renderChannels(filtered);
+        }
+
+        function filterAccounts() {
+            const query = document.getElementById('searchAccount').value.toLowerCase();
+            const filtered = state.accounts.filter(a => 
+                (a.username && a.username.toLowerCase().includes(query)) || 
+                (a.accountName && a.accountName.toLowerCase().includes(query)) ||
+                (a.name && a.name.toLowerCase().includes(query)) ||
+                (a.type && a.type.toLowerCase().includes(query)) ||
+                (a.host && a.host.toLowerCase().includes(query)) ||
+                (a.m3uUrl && a.m3uUrl.toLowerCase().includes(query))
+            );
+            renderAccounts(filtered);
+        }
+
+        function editAccount(i) {
+            editingAccountIndex = i;
+            const acc = state.accounts[i];
+            if (!acc) return;
+            let type = (acc.type || 'VIP').toUpperCase();
+            if (type === 'SUBSCRIBER') type = 'VIP';
+            document.getElementById('accType').value = type;
+            document.getElementById('accName').value = acc.accountName || acc.name || '';
+            document.getElementById('accHost').value = acc.host || '';
+            document.getElementById('accUser').value = acc.username || '';
+            document.getElementById('accPass').value = acc.password || '';
+            document.getElementById('accM3uUrl').value = acc.m3uUrl || '';
+            document.getElementById('accPlan').value = acc.planType || acc.subscriptionPlan || '1 ساڵ';
+            document.getElementById('accPhone').value = acc.customerPhone || '';
+            onAccTypeChange();
+            openModal('accountModal');
+        }
+
+        function addAccount() {
+            const type = document.getElementById('accType').value;
+            const name = document.getElementById('accName').value.trim();
+            const host = document.getElementById('accHost').value.trim();
+            const user = document.getElementById('accUser').value.trim();
+            const pass = document.getElementById('accPass').value.trim();
+            const m3uUrl = document.getElementById('accM3uUrl').value.trim();
+            const plan = document.getElementById('accPlan').value;
+            const phone = document.getElementById('accPhone').value.trim();
+
+            if (type === 'XTREAM' && (!user || !pass || !host)) {
+                return alert("تکایە سێرڤەر/کۆد، یوزەرنەیم و تێپەڕەوشە بنووسە!");
+            }
+            if (type === 'M3U' && !m3uUrl) {
+                return alert("تکایە لینکی M3U بنووسە!");
+            }
+            if (type === 'VIP' && (!user || !pass)) {
+                return alert("تکایە یوزەرنەیم و تێپەڕەوشە بنووسە!");
+            }
+
+            const itemObj = {
+                id: (editingAccountIndex >= 0 && state.accounts[editingAccountIndex]) ? state.accounts[editingAccountIndex].id : Date.now(),
+                name: name || user || (type === 'M3U' ? 'M3U Playlist' : 'VIP Customer'),
+                accountName: name || user || (type === 'M3U' ? 'M3U Playlist' : 'VIP Customer'),
+                type: type === 'VIP' ? 'SUBSCRIBER' : type,
+                host: host,
+                username: user || (type === 'M3U' ? 'm3u_' + Date.now().toString().slice(-4) : ''),
+                password: pass,
+                m3uUrl: m3uUrl,
+                planType: plan,
+                subscriptionPlan: plan,
+                customerPhone: phone,
+                isActive: true,
+                addedTimestamp: Date.now()
+            };
+
+            if (editingAccountIndex >= 0 && editingAccountIndex < state.accounts.length) {
+                state.accounts[editingAccountIndex] = itemObj;
+                editingAccountIndex = -1;
+            } else {
+                state.accounts.push(itemObj);
+            }
+
+            closeModal('accountModal');
+            renderAll();
+            pushToCloud();
+            showStatus("هەژمارەکە لە سێرڤەردا تۆمارکرا 🟢");
+        }
+
+        function deleteAccount(i) {
+            state.accounts.splice(i, 1);
+            renderAll();
+            pushToCloud();
+        }
+
+        function editChannel(i) {
+            editingChannelIndex = i;
+            const ch = state.channels[i];
+            if (!ch) return;
+            document.getElementById('chTitle').value = ch.title || '';
+            document.getElementById('chUrl').value = ch.streamUrl || '';
+            document.getElementById('chCategory').value = ch.category || 'Kurdish';
+            document.getElementById('chLogo').value = ch.logoUrl || '';
+            document.getElementById('chMediaType').value = ch.mediaType || 'LIVE';
+            openModal('channelModal');
+        }
+
+        function addChannel() {
+            const title = document.getElementById('chTitle').value.trim();
+            const url = document.getElementById('chUrl').value.trim();
+            const cat = document.getElementById('chCategory').value.trim() || 'Kurdish';
+            const logo = document.getElementById('chLogo').value.trim();
+            const type = document.getElementById('chMediaType').value;
+            if (!title || !url) return alert("تکایە ناوی کەناڵ و لینکی پەخش بنووسە!");
+
+            const chObj = {
+                id: (editingChannelIndex >= 0 && state.channels[editingChannelIndex]) ? state.channels[editingChannelIndex].id : Date.now(),
+                title,
+                streamUrl: url,
+                category: cat,
+                logoUrl: logo,
+                mediaType: type
+            };
+
+            if (editingChannelIndex >= 0 && editingChannelIndex < state.channels.length) {
+                state.channels[editingChannelIndex] = chObj;
+                editingChannelIndex = -1;
+            } else {
+                state.channels.push(chObj);
+            }
+
+            closeModal('channelModal');
+            renderAll();
+            pushToCloud();
+            showStatus("کەناڵەکە سەرکەوتووانە سەیڤ کرا 📺🟢");
+        }
+
+        function deleteChannel(i) {
+            state.channels.splice(i, 1);
+            renderAll();
+            pushToCloud();
+        }
+
+        function editMarket(i) {
+            editingMarketIndex = i;
+            const item = state.market[i];
+            if (!item) return;
+            document.getElementById('mkTitle').value = item.title || '';
+            document.getElementById('mkPrice').value = item.price || '';
+            document.getElementById('mkCategory').value = item.category || 'Market';
+            document.getElementById('mkImg').value = item.imageUrl || '';
+            document.getElementById('mkPhone').value = item.contactPhone || '';
+            openModal('marketModal');
+        }
+
+        function addMarketItem() {
+            const title = document.getElementById('mkTitle').value.trim();
+            const price = document.getElementById('mkPrice').value.trim();
+            const cat = document.getElementById('mkCategory').value.trim() || 'Market';
+            const img = document.getElementById('mkImg').value.trim();
+            const phone = document.getElementById('mkPhone').value.trim();
+
+            if (editingMarketIndex >= 0 && editingMarketIndex < state.market.length) {
+                state.market[editingMarketIndex] = {
+                    ...state.market[editingMarketIndex],
+                    title, price, category: cat, imageUrl: img, contactPhone: phone
+                };
+                editingMarketIndex = -1;
+            } else {
+                state.market.push({ id: Date.now(), title, price, category: cat, imageUrl: img, contactPhone: phone });
+            }
+
+            closeModal('marketModal');
+            renderAll();
+            pushToCloud();
+        }
+
+        function deleteMarket(i) {
+            state.market.splice(i, 1);
+            renderAll();
+            pushToCloud();
+        }
+
+        function editWebsite(i) {
+            editingWebsiteIndex = i;
+            const item = state.websites[i];
+            if (!item) return;
+            document.getElementById('webTitle').value = item.title || '';
+            document.getElementById('webUrl').value = item.url || '';
+            document.getElementById('webLogo').value = item.logoUrl || '';
+            document.getElementById('webCat').value = item.category || 'General';
+            openModal('websiteModal');
+        }
+
+        function addWebsiteItem() {
+            const title = document.getElementById('webTitle').value.trim();
+            const url = document.getElementById('webUrl').value.trim();
+            const logo = document.getElementById('webLogo').value.trim();
+            const cat = document.getElementById('webCat').value.trim() || 'General';
+
+            if (editingWebsiteIndex >= 0 && editingWebsiteIndex < state.websites.length) {
+                state.websites[editingWebsiteIndex] = {
+                    ...state.websites[editingWebsiteIndex],
+                    title, url, logoUrl: logo, category: cat
+                };
+                editingWebsiteIndex = -1;
+            } else {
+                state.websites.push({ id: Date.now(), title, url, logoUrl: logo, category: cat });
+            }
+
+            closeModal('websiteModal');
+            renderAll();
+            pushToCloud();
+        }
+
+        function deleteWebsite(i) {
+            state.websites.splice(i, 1);
+            renderAll();
+            pushToCloud();
+        }
+
+        function loadDefaultAccounts(shouldPush = true) {
+            state.accounts = [
+                {
+                    id: 1,
+                    name: "Dream IPTV Server",
+                    accountName: "Dream IPTV Server",
+                    type: "XTREAM",
+                    host: "http://dreamteev.xyz:80",
+                    username: "Abdillahmaison",
+                    password: "BMAUAWX",
+                    subscriptionPlan: "1 ساڵ",
+                    customerPhone: "07501191987"
+                },
+                {
+                    id: 2,
+                    name: "Kurd Play Demo Server",
+                    accountName: "Kurd Play Demo Server",
+                    type: "M3U",
+                    m3uUrl: "https://kurdplay.app/demo.m3u",
+                    subscriptionPlan: "1 ساڵ",
+                    customerPhone: "07501191987"
+                },
+                {
+                    id: 3,
+                    name: "KurdPlay VIP Subscriber",
+                    accountName: "KurdPlay VIP Subscriber",
+                    type: "SUBSCRIBER",
+                    username: "kurdplay_vip",
+                    password: "123456",
+                    subscriptionPlan: "1 ساڵ",
+                    customerPhone: "07501191987"
+                }
+            ];
+            renderAll();
+            if (shouldPush) {
+                pushToCloud();
+                showStatus("هەژمارە بنەڕەتییەکان بارکران 👤✅");
+            }
+        }
+
+        function loadDefaultChannels(shouldPush = true) {
+            state.channels = [
+                {
+                    id: 1,
+                    title: "Kurdsat News HD",
+                    streamUrl: "https://stream.kurdsat.tv/hls/live.m3u8",
+                    category: "Kurdish",
+                    logoUrl: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=300",
+                    mediaType: "LIVE"
+                },
+                {
+                    id: 2,
+                    title: "Rudaw TV HD",
+                    streamUrl: "https://rudaw.net/live.m3u8",
+                    category: "Kurdish",
+                    logoUrl: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=300",
+                    mediaType: "LIVE"
+                },
+                {
+                    id: 3,
+                    title: "Kurdistan 24 HD",
+                    streamUrl: "https://kurdistan24.net/live.m3u8",
+                    category: "Kurdish",
+                    logoUrl: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=300",
+                    mediaType: "LIVE"
+                },
+                {
+                    id: 4,
+                    title: "Bein Sports 1 HD",
+                    streamUrl: "https://sample.m3u8",
+                    category: "Sports",
+                    logoUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=300",
+                    mediaType: "LIVE"
+                }
+            ];
+            renderAll();
+            if (shouldPush) {
+                pushToCloud();
+                showStatus("کەناڵە بنەڕەتییەکان بارکران 📺✅");
+            }
+        }
+
+        function loadDefaultMarket(shouldPush = true) {
+            state.market = [
+                {
+                    id: 1,
+                    title: "اشتراکی VIP Kurd Play (١ ساڵ)",
+                    price: "$25",
+                    category: "Subscriptions",
+                    imageUrl: "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600",
+                    contactPhone: "07501191987"
+                },
+                {
+                    id: 2,
+                    title: "ئامێری Smart TV Box 4K Ultra",
+                    price: "$45",
+                    category: "Devices",
+                    imageUrl: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600",
+                    contactPhone: "07501191987"
+                },
+                {
+                    id: 3,
+                    title: "اشتراکی Kurd Play (٦ مانگ)",
+                    price: "$15",
+                    category: "Subscriptions",
+                    imageUrl: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=600",
+                    contactPhone: "07771544341"
+                },
+                {
+                    id: 4,
+                    title: "ریمۆتی زیرەکی Air Mouse + Keyboard",
+                    price: "$12",
+                    category: "Accessories",
+                    imageUrl: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600",
+                    contactPhone: "07501191987"
+                }
+            ];
+            renderAll();
+            if (shouldPush) {
+                pushToCloud();
+                showStatus("کاڵا بنەڕەتییەکانی فرۆشگا بارکران 🛒✅");
+            }
+        }
+
+        function loadDefaultWebsites(shouldPush = true) {
+            state.websites = [
+                {
+                    id: 1,
+                    title: "کورد سینەما / KurdCinema",
+                    url: "https://kurdcinema.com",
+                    logoUrl: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=300",
+                    category: "Entertainment"
+                },
+                {
+                    id: 2,
+                    title: "ڕووداو / Rudaw News",
+                    url: "https://www.rudaw.net/sorani",
+                    logoUrl: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=300",
+                    category: "News"
+                },
+                {
+                    id: 3,
+                    title: "کوردستان ٢٤ / Kurdistan24",
+                    url: "https://www.kurdistan24.net/sorani",
+                    logoUrl: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=300",
+                    category: "News"
+                },
+                {
+                    id: 4,
+                    title: "ئای کورد / iKurd Store",
+                    url: "https://ikurd.org",
+                    logoUrl: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=300",
+                    category: "Tech"
+                },
+                {
+                    id: 5,
+                    title: "گووگڵ / Google Search",
+                    url: "https://www.google.com",
+                    logoUrl: "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=300",
+                    category: "Portal"
+                }
+            ];
+            renderAll();
+            if (shouldPush) {
+                pushToCloud();
+                showStatus("ماڵپەڕە بنەڕەتییەکان بارکران 🌐✅");
+            }
+        }
+
+        function loadDefaultBanners(shouldPush = true) {
+            const defaultTop = [
+                "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=1200",
+                "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=1200"
+            ];
+            const defaultBot = [
+                "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200",
+                "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200"
+            ];
+            state.config = {
+                bottomTickerText: "بەخێربێن بۆ ئەپی کوردپلەی تیڤی 🌟 - نوێترین فیلم و کەناڵەکان لێرەن!",
+                supportPhone: "07501191987",
+                topBannerUrls: defaultTop,
+                bottomBannerUrls: defaultBot
+            };
+            renderAll();
+            if (shouldPush) {
+                pushToCloud();
+                showStatus("وێنەی ڕیکلامە بنەڕەتییەکان بارکران 🖼️✅");
+            }
+        }
+
+        function saveBannersConfig() {
+            const topUrls = [];
+            for (let i = 0; i < 5; i++) {
+                const val = document.getElementById(`topSlot${i}`).value.trim();
+                if (val) topUrls.push(val);
+            }
+
+            const botUrls = [];
+            for (let i = 0; i < 5; i++) {
+                const val = document.getElementById(`botSlot${i}`).value.trim();
+                if (val) botUrls.push(val);
+            }
+
+            state.config = {
+                bottomTickerText: document.getElementById('bottomTickerText').value,
+                supportPhone: document.getElementById('supportPhone').value,
+                topBannerUrls: topUrls,
+                bottomBannerUrls: botUrls
+            };
+            pushToCloud();
+        }
+
+        function saveQuickMainBanners() {
+            const topVal = document.getElementById('quickTopUrl').value.trim();
+            const botVal = document.getElementById('quickBotUrl').value.trim();
+
+            const topSlot0 = document.getElementById('topSlot0');
+            if (topSlot0) topSlot0.value = topVal;
+
+            const botSlot0 = document.getElementById('botSlot0');
+            if (botSlot0) botSlot0.value = botVal;
+
+            saveBannersConfig();
+            showStatus("وێنەکانی بەشی سەرەکی بە سەرکەوتوویی بە ئۆنلاین نوێکرانەوە 🖼️⚡");
+        }
+
+        function exportBackupJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `kurdplay_backup_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showStatus("فایلی بێکەپ داگیرا 📁✅");
+        }
+
+        function updateDbUrl() {
+            dbUrl = document.getElementById('dbUrlInput').value.trim();
+            syncFromCloud();
+        }
+
+        // Init on load
+        window.onload = () => { syncFromCloud(); };
+    </script>
+</body>
+</html>
